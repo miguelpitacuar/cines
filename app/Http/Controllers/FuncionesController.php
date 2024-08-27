@@ -21,7 +21,8 @@ class FuncionesController extends Controller
      */
     public function create()
     {
-        //
+        $funcion=funciones::all();
+        return view ('funciones.create',compact('funcion'));
     }
 
     /**
@@ -29,7 +30,9 @@ class FuncionesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos_funciones=request()->except('_token');
+        funciones::insert($datos_funciones);
+        return response()->json($datos_funciones);
     }
 
     /**
@@ -43,24 +46,30 @@ class FuncionesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(funciones $funciones)
+    public function edit($id)
     {
-        //
+        $funcion = funciones::findOrFail($id);
+        return view('funciones.edit', compact('funcion'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, funciones $funciones)
+    public function update(Request $request,$id)
     {
-        //
+        $datos_funciones=request()->except(['_token','_method']);
+        funciones::where('id','=',$id)->update($datos_funciones);
+        
+        $funcion = funciones::findOrfail($id);
+        return view('funciones.edit',compact('funcion'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(funciones $funciones)
+    public function destroy( $id)
     {
-        //
+        funciones::destroy($id);
+        return redirect('Funciones');
     }
 }

@@ -21,7 +21,8 @@ class ReservasController extends Controller
      */
     public function create()
     {
-        //
+        $reserva=reservas::all();
+        return view ('reservas.create',compact('reserva'));
     }
 
     /**
@@ -29,7 +30,9 @@ class ReservasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos_reservas=request()->except('_token');
+        reservas::insert($datos_reservas);
+        return response()->json($datos_reservas);
     }
 
     /**
@@ -43,24 +46,30 @@ class ReservasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(reservas $reservas)
+    public function edit( $id)
     {
-        //
+        $reserva = reservas::findOrFail($id);
+        return view('reservas.edit', compact('reserva'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, reservas $reservas)
+    public function update(Request $request,$id)
     {
-        //
+        $datos_reservas=request()->except(['_token','_method']);
+        reservas::where('id','=',$id)->update($datos_reservas);
+        
+        $reserva = reservas::findOrfail($id);
+        return view('reservas.edit',compact('reserva'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(reservas $reservas)
+    public function destroy( $id)
     {
-        //
+        reservas::destroy($id);
+        return redirect('Reservas');
     }
 }

@@ -21,7 +21,8 @@ class ClacificacionesController extends Controller
      */
     public function create()
     {
-        //
+        $clacificacion=clacificaciones::all();
+        return view ('clacificaciones.create',compact('clacificacion'));
     }
 
     /**
@@ -29,7 +30,17 @@ class ClacificacionesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validar los datos del formulario
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'descripcion' => 'nullable|string',
+    ]);
+
+    // Crear una nueva categoría
+    clacificaciones::create($request->all());
+
+    // Redirigir a la vista de categorías con un mensaje de éxito
+    return redirect('Clacificaciones')->with('success', 'clacificacion agregada correctamente.');
     }
 
     /**
@@ -43,24 +54,39 @@ class ClacificacionesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(clacificaciones $clacificaciones)
+    public function edit( $id)
     {
-        //
+        $clacificacion = clacificaciones::findOrFail($id);
+        return view('clacificaciones.edit', compact('clacificacion'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, clacificaciones $clacificaciones)
+    public function update(Request $request,$id)
     {
-        //
+        // Validar los datos del formulario
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'descripcion' => 'nullable|string',
+    ]);
+
+    // Obtener todos los datos del formulario excepto el token y el método
+    $datos_categorias = $request->except(['_token', '_method']);
+    
+    // Actualizar la categoría en la base de datos
+    clacificaciones::where('id', $id)->update($datos_categorias);
+    
+    // Redirigir a la vista de índice con un mensaje de éxito
+    return redirect('Clacificaciones')->with('success', 'La Clacificacion se actualizó correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(clacificaciones $clacificaciones)
+    public function destroy( $id)
     {
-        //
+        clacificaciones::destroy($id);
+        return redirect('Clacificaciones')->with('success', 'La clacificacion se elimino correctamente correctamente.');;
     }
 }

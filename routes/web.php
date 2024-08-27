@@ -21,7 +21,7 @@ use App\Http\Controllers\SalasController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::resource('Categorias', CategoriasController::class);
@@ -29,7 +29,7 @@ Route::resource('Categorias', CategoriasController::class);
 Route::resource('Actores', ActoresController::class);
 Route::resource('Clacificaciones', clacificacionesController::class);
 Route::resource('Directores', DirectoresController::class);
-Route::resource('Funciones ', FuncionesController::class);
+Route::resource('Funciones', FuncionesController::class);
 Route::resource('Generos', GenerosController::class);
 Route::resource('Peliculas', PeliculasController::class);
 Route::resource('Reservas', ReservasController::class);
@@ -40,4 +40,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/home', [ActoresController::class, 'index'])->name('home');
+});
+*/

@@ -21,7 +21,8 @@ class DirectoresController extends Controller
      */
     public function create()
     {
-        //
+        $director=directores::all();
+        return view ('directores.create',compact('director'));
     }
 
     /**
@@ -29,7 +30,9 @@ class DirectoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos_directores=request()->except('_token');
+        directores::insert($datos_directores);
+        return response()->json($datos_directores);
     }
 
     /**
@@ -43,24 +46,31 @@ class DirectoresController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(directores $directores)
+    public function edit( $id)
     {
-        //
+        $director = directores::findOrFail($id);
+        return view('directores.edit', compact('director'));
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, directores $directores)
+    public function update(Request $request,$id)
     {
-        //
+        $datos_directores=request()->except(['_token','_method']);
+        directores::where('id','=',$id)->update($datos_directores);
+        
+        $director = directores::findOrfail($id);
+        return view('directores.edit',compact('director'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(directores $directores)
+    public function destroy($id)
     {
-        //
+        directores::destroy($id);
+        return redirect('Directores');
     }
 }

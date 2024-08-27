@@ -21,7 +21,8 @@ class GenerosController extends Controller
      */
     public function create()
     {
-        //
+        $genero=generos::all();
+        return view ('generos.create',compact('genero'));
     }
 
     /**
@@ -29,7 +30,9 @@ class GenerosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos_generos=request()->except('_token');
+        generos::insert($datos_generos);
+        return response()->json($datos_generos);
     }
 
     /**
@@ -43,24 +46,30 @@ class GenerosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(generos $generos)
+    public function edit($id)
     {
-        //
+        $genero = generos::findOrFail($id);
+        return view('generos.edit', compact('genero'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, generos $generos)
+    public function update(Request $request,$id)
     {
-        //
+        $datos_generos=request()->except(['_token','_method']);
+        generos::where('id','=',$id)->update($datos_generos);
+        
+        $genero = generos::findOrfail($id);
+        return view('generos.edit',compact('genero'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(generos $generos)
+    public function destroy( $id)
     {
-        //
+        generos::destroy($id);
+        return redirect('Generos');
     }
 }
